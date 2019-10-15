@@ -8,6 +8,7 @@ module.exports = {
         if (stderr) {
             console.error(`error: ${stderr}`);
         }
+        console.log(stdout);
         return stdout.split("Nom :")[1].split("Address:")[0].replace(/\s/g, '');
     }
 };
