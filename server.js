@@ -13,22 +13,24 @@ mongoose.connect(url, {
   useUnifiedTopology: true
 });
 
-var db = mongoose.connection;
+var connection = mongoose.connection;
 
-db.once('open', function() {
+connection.once('open', function() {
     console.log("Connection successful");
 
     //faster than model
-    db.db.collection("packets", function(err, collection){
+    connection.db.collection("packets", function(err, collection){
         collection.find({}).toArray(function(err,data){
             console.log(data);
             data.forEach(async (value) => {
-                try{
-                    value.domain = await whoIsService.WhoIs(value.ip);
-                    console.log(value.domain);
-                }catch(e){
-                    console.log(e);
-                }                
+                if(value.domain){
+                    try{
+                        value.domain = await whoIsService.WhoIs(value.ip);
+                        console.log(value.domain);
+                    }catch(e){
+                        console.log(e);
+                    }
+                }                                
             });
         })
     });
